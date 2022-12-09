@@ -28,10 +28,10 @@ tuanvu81@host81:~/PycharmProjects/djangoBE$ python3 manage.py runserver
 
 * Ghi lại các dependencies vào file 
 ```
-python -m pip freeze > requirements.txt
+python3 -m pip freeze > requirements.txt
 ```
 
 * Clone về, tự động cài đặt như npm install:
 ```
-python -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
