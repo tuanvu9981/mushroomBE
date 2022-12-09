@@ -1,5 +1,7 @@
 ## Mushroom classification (CLSF) backend
 
+### Chú ý, trước khi đẩy code lên github cần xóa bỏ secret code ở file ***settings.py*** 
+
 ### Những câu lệnh cơ bản để khởi tạo dự án 
 * Cài đặt gói 
 ```
@@ -22,7 +24,8 @@ tuanvu81@host81:~/PycharmProjects/djangoBE$ python3 manage.py startapp mushroomC
 tuanvu81@host81:~/PycharmProjects/djangoBE$ python3 manage.py runserver
 ```
 
-* Ứng dụng khởi chạy mặc định ở cổng 8000 của localhost 
+* Ứng dụng khởi chạy mặc định ở cổng 8000 của localhost
+
 * Ghi lại các dependencies vào file 
 ```
 python -m pip freeze > requirements.txt
