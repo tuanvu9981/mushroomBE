@@ -43,3 +43,12 @@ def test_function(request):
                 ]
             }
         )
+
+@csrf_exempt
+def test(request):
+    if request.method == 'GET':
+        return JsonResponse(
+            data={
+                "name": "MUSHROOM"
+            }
+        )
