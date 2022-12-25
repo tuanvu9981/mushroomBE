@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http.response import JsonResponse
 import json
 
+
 # Create your views here
 @csrf_exempt
 def test_function(request):
@@ -43,6 +44,7 @@ def test_function(request):
                 ]
             }
         )
+
 
 @csrf_exempt
 def test(request):
