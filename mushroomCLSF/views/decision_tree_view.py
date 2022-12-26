@@ -28,7 +28,9 @@ def classify(data):
 def decision_tree_classify(request):
     if request.method == 'GET':
         data = json.loads(request.body)
-
+        # converted_data = {}
+        # for key, val in data.items():
+        #     converted_data[key] = list(val)
         result, explanation = classify(data)
         return JsonResponse(
             data={

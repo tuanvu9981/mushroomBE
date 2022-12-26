@@ -8,41 +8,13 @@ import json
 @csrf_exempt
 def test_function(request):
     if request.method == 'GET':
+        data = json.loads(request.body)
+
+        converted_data = {}
+        for key, val in data.items():
+            converted_data[key] = list(val)
         return JsonResponse(
-            data={
-                "subject": "Kỹ nghệ tri thức",
-                "backend": {
-                    "framework": "django",
-                    "deploy": ["vercel", "azure"]
-                },
-                "frontend": {
-                    "framework": "react",
-                    "deploy": ["vercel"]
-                },
-                "team member": [
-                    {
-                        "name": "Trần Đức Hiếu",
-                        "realname": "Thiếu gia Quảng Ninh",
-                        "characteristic": "Trùm web"
-                    },
-                    {
-                        "name": "Trần Bảo Ngọc",
-                        "realname": "Loli ...",
-                        "characteristic": "Trùm AI Data"
-                    },
-                    {
-                        "name": "Hoàng Mai Đức Long",
-                        "realname": "Dài",
-                        "characteristic": "Đại gia nhà đất Hoàng Mai",
-                        "another": "Trùm đứng lên ngồi xuống"
-                    },
-                    {
-                        "name": "VTD",
-                        "realname": "The へたへたです",
-                        "characteristic": "Làm phông bạt trang trí ...",
-                    },
-                ]
-            }
+            data=converted_data
         )
 
 
