@@ -35,3 +35,15 @@ python3 -m pip freeze > requirements.txt
 ```
 python3 -m pip install -r requirements.txt
 ```
+
+* Run with 0.0.0.0
+```commandline
+python3 manage.py runserver 0.0.0.0:8000
+```
+
+* Khi đang runserver cho hoạt động, chuyển sang screen mới bằng lệnh ```Ctrl a c```. 
+* Kiểm tra thấy đã đang ở màn screen mới rồi bằng lệnh ```screen -ls```
+* Ngắt screen:
+```commandline
+screen -S name1 -X quit      
+```
