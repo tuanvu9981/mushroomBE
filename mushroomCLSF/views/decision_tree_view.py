@@ -70,7 +70,7 @@ def classify(data):
 
 @csrf_exempt
 def decision_tree_classify(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = json.loads(request.body)
         converted = extract_data(data)
         result, explanation = classify(converted)
