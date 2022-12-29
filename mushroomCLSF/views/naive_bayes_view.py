@@ -32,7 +32,6 @@ def naive_bayes_classify(request):
         return JsonResponse(
             data={
                 "status": 200,
-                "classifier": 'nb',
                 "result": result,
                 "explanation": explanation
             }

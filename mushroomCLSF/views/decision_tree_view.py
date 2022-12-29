@@ -32,13 +32,20 @@ def get_decision_path(model, input_sample):
         else:
             threshold_sign = ">"
 
+        response_threshold = str(threshold[node_id])
+        response_no = int(i)
+        response_node_id = int(node_id)
+        response_feature = str(feature_names[feature[node_id]])
+        response_value = str(input_sample.values[sample_id, feature[node_id]])
+        response_inequality_sign = str(threshold_sign)
+
         path.append({
-            'no': i,
-            'node_id': node_id,
-            'feature': feature_names[feature[node_id]],
-            'value': input_sample.values[sample_id, feature[node_id]],
-            'inequality_sign': threshold_sign,
-            'threshold': threshold[node_id],
+            'no': response_no,
+            'node_id': response_node_id,
+            'feature': response_feature,
+            'value': response_value,
+            'inequality_sign': response_inequality_sign,
+            'threshold': response_threshold,
         })
     return path
 
@@ -68,7 +75,6 @@ def decision_tree_classify(request):
         return JsonResponse(
             data={
                 "status": 200,
-                "classifier": "tree",
                 "result": result,
                 "explanation": explanation
             }
