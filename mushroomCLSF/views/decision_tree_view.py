@@ -7,6 +7,41 @@ import pandas as pd
 from mushroomCLSF.datasets.mushrooms import load_mushrooms
 
 
+def get_decision_path(model, input_sample):
+    node_indicator = model.decision_path(input_sample)
+    leaf_id = model.apply(input_sample)
+    feature = model.tree_.feature
+    threshold = model.tree_.threshold
+    feature_names = input_sample.columns.to_list()
+    sample_id = 0
+    # obtain ids of the nodes `sample_id` goes through, i.e., row `sample_id`
+    node_index = node_indicator.indices[
+                    node_indicator.indptr[sample_id]: node_indicator.indptr[sample_id + 1]
+                 ]
+
+    path = []
+    for node_id in node_index:
+        # continue to the next node if it is a leaf node
+        if leaf_id[sample_id] == node_id:
+            continue
+
+        # check if value of the split feature for sample 0 is below threshold
+        if input_sample.values[sample_id, feature[node_id]] <= threshold[node_id]:
+            threshold_sign = "<="
+        else:
+            threshold_sign = ">"
+
+        path.append("decision node {node} : ({feature} = {value}) {inequality} {threshold})".format(
+                node=node_id,
+                feature=feature_names[feature[node_id]],
+                value=input_sample.values[sample_id, feature[node_id]],
+                inequality=threshold_sign,
+                threshold=threshold[node_id],
+            )
+        )
+    return path
+
+
 def classify(data):
     """ CLASSIFICATION CODE HERE """
     data = {key: [value] for (key, value) in data.items()}
@@ -20,7 +55,7 @@ def classify(data):
     model.fit(x_train, y_train)
     output = model.predict(input_df)
     result = decode(output, column='class')[0]
-    explanation = ""
+    explanation = '\n'.join(get_decision_path(model, input_df))
     return result, explanation
 
 
@@ -46,8 +81,8 @@ if __name__ == '__main__':
         'cap-shape': 'x',
         'cap-surface': 's',
         'cap-color': 'n',
-        'bruises': 't',
-        'odor': 'p',
+        # 'bruises': 't',
+        # 'odor': 'p',
         'stalk-shape': 'e',
         'stalk-root': 'e',
         'spore-print-color': 'k',
@@ -58,4 +93,4 @@ if __name__ == '__main__':
     expected_label = 'p'
     res_label, explain_text = classify(sample_request_data)
     print(f'Expected result: {expected_label}')
-    print(f'Result: {res_label}, Reason: {explain_text}')
+    print(f'Result: {res_label}\nReason: {explain_text}')
