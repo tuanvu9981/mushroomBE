@@ -18,11 +18,9 @@ def classify(data):
     x_train, x_test, y_train, y_test = train_test_split(df[input_features], df['class'], random_state=42, test_size=0.2)
     model = CategoricalNB()
     model.fit(x_train, y_train)
-    # output = model.predict(input_df)
     probas = model.predict_proba(input_df)[0]
     result = decode([max(range(len(probas)), key=probas.__getitem__)], column='class')[0]
-    explanation = ' '.join([f'{decode([i], column="class")[0]}={round(prob, 2)*100}%' for (i, prob) in enumerate(probas)])
-    # explanation = f'{round(max(probas[0]) * 100, 2)}%'
+    explanation = {decode([i], column="class")[0]: round(prob, 2)*100 for (i, prob) in enumerate(probas)}
     return result, explanation
 
 
@@ -30,13 +28,11 @@ def classify(data):
 def naive_bayes_classify(request):
     if request.method == 'GET':
         data = json.loads(request.body)
-        # converted_data = {}
-        # for key, val in data.items():
-        #     converted_data[key] = list(val)
         result, explanation = classify(data)
         return JsonResponse(
             data={
                 "status": 200,
+                "classifier": 'nb',
                 "result": result,
                 "explanation": explanation
             }
@@ -58,6 +54,6 @@ if __name__ == '__main__':
         'ring-type': 'p',
     }
     expected_label = 'p'
-    res_label, explain_text = classify(sample_request_data)
+    res_label, explain = classify(sample_request_data)
     print(f'Expected result: {expected_label}')
-    print(f'Result: {res_label}, Reason: {explain_text}')
+    print(f'Result: {res_label}, Reason: {explain}')
