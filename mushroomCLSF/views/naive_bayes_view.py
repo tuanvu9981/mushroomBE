@@ -30,7 +30,6 @@ def naive_bayes_classify(request):
         data = json.loads(request.body)
         converted = extract_data(data)
         result, explanation = classify(converted)
-        result, explanation = classify(data)
         return JsonResponse(
             data={
                 "status": 200,
