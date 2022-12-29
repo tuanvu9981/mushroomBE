@@ -5,7 +5,7 @@ import pandas as pd
 from mushroomCLSF.datasets.mushrooms import load_mushrooms
 from sklearn.naive_bayes import CategoricalNB
 from sklearn.model_selection import train_test_split
-
+from mushroomCLSF.views.util import extract_data
 
 def classify(data):
     """ CLASSIFICATION CODE HERE """
@@ -28,6 +28,8 @@ def classify(data):
 def naive_bayes_classify(request):
     if request.method == 'GET':
         data = json.loads(request.body)
+        converted = extract_data(data)
+        result, explanation = classify(converted)
         result, explanation = classify(data)
         return JsonResponse(
             data={

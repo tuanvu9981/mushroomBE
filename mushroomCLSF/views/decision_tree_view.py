@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from mushroomCLSF.datasets.mushrooms import load_mushrooms
 import numpy as np
+from mushroomCLSF.views.util import extract_data
 
 
 def get_decision_path(model, input_sample):
@@ -71,6 +72,8 @@ def classify(data):
 def decision_tree_classify(request):
     if request.method == 'GET':
         data = json.loads(request.body)
+        converted = extract_data(data)
+        result, explanation = classify(converted)
         result, explanation = classify(data)
         return JsonResponse(
             data={
