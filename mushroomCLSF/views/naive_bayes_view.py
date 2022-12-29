@@ -18,9 +18,11 @@ def classify(data):
     x_train, x_test, y_train, y_test = train_test_split(df[input_features], df['class'], random_state=42, test_size=0.2)
     model = CategoricalNB()
     model.fit(x_train, y_train)
-    output = model.predict(input_df)
-    result = decode(output, column='class')[0]
-    explanation = ""
+    # output = model.predict(input_df)
+    probas = model.predict_proba(input_df)[0]
+    result = decode([max(range(len(probas)), key=probas.__getitem__)], column='class')[0]
+    explanation = ' '.join([f'{decode([i], column="class")[0]}={round(prob, 2)*100}%' for (i, prob) in enumerate(probas)])
+    # explanation = f'{round(max(probas[0]) * 100, 2)}%'
     return result, explanation
 
 
