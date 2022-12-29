@@ -1,10 +1,11 @@
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from mushroomCLSF.datasets.mushrooms import load_mushrooms
+import numpy as np
 
 
 def get_decision_path(model, input_sample):
@@ -20,7 +21,7 @@ def get_decision_path(model, input_sample):
                  ]
 
     path = []
-    for node_id in node_index:
+    for i, node_id in enumerate(node_index):
         # continue to the next node if it is a leaf node
         if leaf_id[sample_id] == node_id:
             continue
@@ -31,14 +32,14 @@ def get_decision_path(model, input_sample):
         else:
             threshold_sign = ">"
 
-        path.append("decision node {node} : ({feature} = {value}) {inequality} {threshold})".format(
-                node=node_id,
-                feature=feature_names[feature[node_id]],
-                value=input_sample.values[sample_id, feature[node_id]],
-                inequality=threshold_sign,
-                threshold=threshold[node_id],
-            )
-        )
+        path.append({
+            'no': i,
+            'node_id': node_id,
+            'feature': feature_names[feature[node_id]],
+            'value': input_sample.values[sample_id, feature[node_id]],
+            'inequality_sign': threshold_sign,
+            'threshold': threshold[node_id],
+        })
     return path
 
 
@@ -55,7 +56,7 @@ def classify(data):
     model.fit(x_train, y_train)
     output = model.predict(input_df)
     result = decode(output, column='class')[0]
-    explanation = '\n'.join(get_decision_path(model, input_df))
+    explanation = get_decision_path(model, input_df)
     return result, explanation
 
 
@@ -63,13 +64,11 @@ def classify(data):
 def decision_tree_classify(request):
     if request.method == 'GET':
         data = json.loads(request.body)
-        # converted_data = {}
-        # for key, val in data.items():
-        #     converted_data[key] = list(val)
         result, explanation = classify(data)
         return JsonResponse(
             data={
                 "status": 200,
+                "classifier": "tree",
                 "result": result,
                 "explanation": explanation
             }
